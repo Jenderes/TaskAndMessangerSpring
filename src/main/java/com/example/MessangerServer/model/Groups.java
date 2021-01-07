@@ -3,6 +3,7 @@ package com.example.MessangerServer.model;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "GROUPS")
@@ -12,9 +13,9 @@ public class Groups {
     private Long groupId;
     private String groupName;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Employees> userListGroup = new ArrayList<>();
+    private Set<Employees> userListGroup;
     @OneToMany(targetEntity=GroupMessages.class, mappedBy="messagesgroup")
-    private List<GroupMessages> groupsMessage = new ArrayList<>();
+    private Set<GroupMessages> groupsMessage;
 
     public String getGroupName() {
         return groupName;
@@ -24,19 +25,19 @@ public class Groups {
         this.groupName = groupName;
     }
 
-    public List<Employees> getUserListGroup() {
+    public Set<Employees> getUserListGroup() {
         return userListGroup;
     }
 
-    public void setUserListGroup(List<Employees> userListGroup) {
+    public void setUserListGroup(Set<Employees> userListGroup) {
         this.userListGroup = userListGroup;
     }
 
-    public List<GroupMessages> getGroupsMessage() {
+    public Set<GroupMessages> getGroupsMessage() {
         return groupsMessage;
     }
 
-    public void setGroupsMessage(List<GroupMessages> groupsMessage) {
+    public void setGroupsMessage(Set<GroupMessages> groupsMessage) {
         this.groupsMessage = groupsMessage;
     }
 }

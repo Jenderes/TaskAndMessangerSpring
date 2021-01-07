@@ -12,7 +12,6 @@ public class Messages {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long message_id;
-    @NotNull
     private String textMessage;
     @Temporal (TemporalType.DATE)
     private Date  sendDate;

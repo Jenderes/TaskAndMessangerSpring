@@ -11,7 +11,6 @@ public class Tasks {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long task_id;
-    @NotNull
     private String textTask;
     @Temporal (TemporalType.DATE)
     private Date sendDate;

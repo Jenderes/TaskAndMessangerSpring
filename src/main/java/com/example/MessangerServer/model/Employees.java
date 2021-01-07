@@ -1,53 +1,100 @@
 package com.example.MessangerServer.model;
 
 import com.sun.istack.NotNull;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "EMPLOYEES")
-public class Employees {
+public class Employees implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
-    @NotNull
-    private String login;
-    @NotNull
+    private String username;
     private String password;
+    @Transient
+    private String passwordConfirm;
     private String firstName;
     private String lastName;
     private String middleName;
     private String model;
     private String function;
     private String phone;
+    @Temporal (TemporalType.DATE)
+    private Date leaveDate;
     @OneToMany(targetEntity=Messages.class, mappedBy="messages")
-    private List<Messages> messages = new ArrayList<>();
+    private Set<Messages> messages;
     @OneToMany(targetEntity=Tasks.class, mappedBy="tasks")
-    private List<Tasks> tasks = new ArrayList<>();
+    private Set<Tasks> tasks;
     @OneToMany(targetEntity=Contacts.class, mappedBy="contacts")
-    private List<Contacts> contacts = new ArrayList<>();
+    private Set<Contacts> contacts;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Groups> listGroupsUser;
+    private Set<Groups> listGroupsUser;
     @OneToMany(targetEntity=GroupMessages.class, mappedBy="groupmessages")
-    private List<GroupMessages> employeeMessagesGroup = new ArrayList<>();
-    public String getLogin() {
-        return login;
+    private Set<GroupMessages> employeeMessagesGroup;
+    @ManyToMany(fetch = FetchType.EAGER)
+    private Set<Role> roles;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return null;
     }
 
-    public void setLogin(String login) {
-        this.login = login;
+    public Long getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getPassword() {
         return password;
     }
 
+    @Override
+    public String getUsername() {
+        return username;
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return true;
+    }
+
     public void setPassword(String password) {
         this.password = password;
     }
 
+    public String getPasswordConfirm() {
+        return passwordConfirm;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
+    }
     public String getFirstName() {
         return firstName;
     }
@@ -96,43 +143,59 @@ public class Employees {
         this.phone = phone;
     }
 
-    public List<Messages> getMessages() {
+    public Set<Messages> getMessages() {
         return messages;
     }
 
-    public void setMessages(List<Messages> messages) {
+    public void setMessages(Set<Messages> messages) {
         this.messages = messages;
     }
 
-    public List<Tasks> getTasks() {
+    public Set<Tasks> getTasks() {
         return tasks;
     }
 
-    public void setTasks(List<Tasks> tasks) {
+    public void setTasks(Set<Tasks> tasks) {
         this.tasks = tasks;
     }
 
-    public List<Contacts> getContacts() {
+    public Set<Contacts> getContacts() {
         return contacts;
     }
 
-    public void setContacts(List<Contacts> contacts) {
+    public void setContacts(Set<Contacts> contacts) {
         this.contacts = contacts;
     }
 
-    public List<Groups> getListGroupsUser() {
+    public Set<Groups> getListGroupsUser() {
         return listGroupsUser;
     }
 
-    public void setListGroupsUser(List<Groups> listGroupsUser) {
+    public void setListGroupsUser(Set<Groups> listGroupsUser) {
         this.listGroupsUser = listGroupsUser;
     }
 
-    public List<GroupMessages> getEmployeeMessagesGroup() {
+    public Set<GroupMessages> getEmployeeMessagesGroup() {
         return employeeMessagesGroup;
     }
 
-    public void setEmployeeMessagesGroup(List<GroupMessages> employeeMessagesGroup) {
+    public void setEmployeeMessagesGroup(Set<GroupMessages> employeeMessagesGroup) {
         this.employeeMessagesGroup = employeeMessagesGroup;
+    }
+
+    public Date getLeaveDate() {
+        return leaveDate;
+    }
+
+    public void setLeaveDate(Date leaveDate) {
+        this.leaveDate = leaveDate;
+    }
+
+    public Set<Role> getRoles() {
+        return roles;
+    }
+
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
 }
