@@ -25,15 +25,21 @@ public class Employees implements UserDetails {
     private String phone;
     @Temporal (TemporalType.DATE)
     private Date leaveDate;
-    @OneToMany(targetEntity=Messages.class, mappedBy="messages")
-    private Set<Messages> messages;
-    @OneToMany(targetEntity=Tasks.class, mappedBy="tasks")
-    private Set<Tasks> tasks;
-    @OneToMany(targetEntity=Contacts.class, mappedBy="contacts")
-    private Set<Contacts> contacts;
+    @OneToMany (fetch = FetchType.LAZY, mappedBy = "taskForEmployees")
+    private Set<Tasks> taskFor;
+    @OneToMany (fetch = FetchType.LAZY, mappedBy = "taskFromEmployees")
+    private Set<Tasks> taskFrom;
+    @OneToMany (fetch = FetchType.LAZY, mappedBy = "messageForEmployees")
+    private Set<Messages> messageFor;
+    @OneToMany (fetch = FetchType.LAZY, mappedBy = "messageFromEmployees")
+    private Set<Messages> messageFrom;
+    @OneToMany (fetch = FetchType.LAZY, mappedBy = "contactForEmployees")
+    private Set<Contacts> contactFor;
+    @OneToMany (fetch = FetchType.LAZY, mappedBy = "contactFromEmployees")
+    private Set<Contacts> contactFrom;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Groups> listGroupsUser;
-    @OneToMany(targetEntity=GroupMessages.class, mappedBy="groupmessages")
+    @OneToMany(targetEntity=GroupMessages.class, mappedBy="messagesgroup")
     private Set<GroupMessages> employeeMessagesGroup;
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
@@ -143,28 +149,52 @@ public class Employees implements UserDetails {
         this.phone = phone;
     }
 
-    public Set<Messages> getMessages() {
-        return messages;
+    public Set<Messages> getMessageFor() {
+        return messageFor;
     }
 
-    public void setMessages(Set<Messages> messages) {
-        this.messages = messages;
+    public void setMessageFor(Set<Messages> messageFor) {
+        this.messageFor = messageFor;
     }
 
-    public Set<Tasks> getTasks() {
-        return tasks;
+    public Set<Messages> getMessageFrom() {
+        return messageFrom;
     }
 
-    public void setTasks(Set<Tasks> tasks) {
-        this.tasks = tasks;
+    public void setMessageFrom(Set<Messages> messageFrom) {
+        this.messageFrom = messageFrom;
     }
 
-    public Set<Contacts> getContacts() {
-        return contacts;
+    public Set<Tasks> getTaskFor() {
+        return taskFor;
     }
 
-    public void setContacts(Set<Contacts> contacts) {
-        this.contacts = contacts;
+    public void setTaskFor(Set<Tasks> taskFor) {
+        this.taskFor = taskFor;
+    }
+
+    public Set<Tasks> getTaskFrom() {
+        return taskFrom;
+    }
+
+    public void setTaskFrom(Set<Tasks> taskFrom) {
+        this.taskFrom = taskFrom;
+    }
+
+    public Set<Contacts> getContactFor() {
+        return contactFor;
+    }
+
+    public void setContactFor(Set<Contacts> contactFor) {
+        this.contactFor = contactFor;
+    }
+
+    public Set<Contacts> getContactFrom() {
+        return contactFrom;
+    }
+
+    public void setContactFrom(Set<Contacts> contactFrom) {
+        this.contactFrom = contactFrom;
     }
 
     public Set<Groups> getListGroupsUser() {

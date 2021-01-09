@@ -12,9 +12,4 @@ public class MessangerServerApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(MessangerServerApplication.class, args);
 	}
-
-	@Bean
-	public BCryptPasswordEncoder bCryptPasswordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
 }

@@ -1,7 +1,7 @@
 package com.example.MessangerServer.model;
 
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.Transient;
+import javax.persistence.Id;
+import javax.persistence.Transient;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.Entity;
@@ -9,7 +9,7 @@ import javax.persistence.Table;
 import java.util.Set;
 
 @Entity
-@Table(name = "t_role")
+@Table(name = "role")
 public class Role  implements GrantedAuthority {
     @Id
     private Long id;

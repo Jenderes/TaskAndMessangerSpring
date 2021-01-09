@@ -8,24 +8,18 @@ import java.util.Date;
 public class GroupMessages {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long group_message_id;
-    private String gr_msg_text;
+    private Long groupMessageId;
+    private String groupMassageText;
 
     private String type_message;
     @Temporal (TemporalType.DATE)
     private Date sendDate;
     @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name="message_for_user_id", referencedColumnName="userId"),
-            @JoinColumn(name="message_from_user_id", referencedColumnName="groupId")
-    })
-    public String getGr_msg_text() {
-        return gr_msg_text;
-    }
-
-    public void setGr_msg_text(String gr_msg_text) {
-        this.gr_msg_text = gr_msg_text;
-    }
+    @JoinColumn(name="message_from_user_id")
+    private Employees employeesmessage;
+    @ManyToOne
+    @JoinColumn(name="message_for_group_id")
+    private Groups messagesgroup;
 
     public String getType_message() {
         return type_message;
@@ -41,5 +35,29 @@ public class GroupMessages {
 
     public void setSendDate(Date sendDate) {
         this.sendDate = sendDate;
+    }
+
+    public Employees getEmployeesmessage() {
+        return employeesmessage;
+    }
+
+    public void setEmployeesmessage(Employees employeesmessage) {
+        this.employeesmessage = employeesmessage;
+    }
+
+    public String getGroupMassageText() {
+        return groupMassageText;
+    }
+
+    public void setGroupMassageText(String groupMassageText) {
+        this.groupMassageText = groupMassageText;
+    }
+
+    public Groups getMessagesgroup() {
+        return messagesgroup;
+    }
+
+    public void setMessagesgroup(Groups messagesgroup) {
+        this.messagesgroup = messagesgroup;
     }
 }

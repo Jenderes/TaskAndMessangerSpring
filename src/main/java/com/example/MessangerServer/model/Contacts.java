@@ -10,14 +10,34 @@ public class Contacts {
     private Long contact_id;
     private String status;
     @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name="contact_for_user_id", referencedColumnName="userId"),
-            @JoinColumn(name="contact_from_user_id", referencedColumnName="userId")
-    })
+    @JoinColumn(name="sendForId")
+    private Employees contactForEmployees;
+
+    @ManyToOne
+    @JoinColumn(name="sendFromId")
+    private Employees contactFromEmployees;
+
     public String getStatus() {
         return status;
     }
+
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public Employees getContactForEmployees() {
+        return contactForEmployees;
+    }
+
+    public void setContactForEmployees(Employees contactForEmployees) {
+        this.contactForEmployees = contactForEmployees;
+    }
+
+    public Employees getContactFromEmployees() {
+        return contactFromEmployees;
+    }
+
+    public void setContactFromEmployees(Employees contactFromEmployees) {
+        this.contactFromEmployees = contactFromEmployees;
     }
 }

@@ -18,10 +18,13 @@ public class Tasks {
     private Date endDate;
     private String status;
     @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name="task_for_user_id", referencedColumnName="userId"),
-            @JoinColumn(name="task_from_user_id", referencedColumnName="userId")
-    })
+    @JoinColumn(name="sendTaskFor")
+    private Employees taskForEmployees;
+
+    @ManyToOne
+    @JoinColumn(name="sendTaskFrom")
+    private Employees taskFromEmployees;
+
     public String getTextTask() {
         return textTask;
     }
@@ -54,4 +57,19 @@ public class Tasks {
         this.status = status;
     }
 
+    public Employees getTaskForEmployees() {
+        return taskForEmployees;
+    }
+
+    public void setTaskForEmployees(Employees taskForEmployees) {
+        this.taskForEmployees = taskForEmployees;
+    }
+
+    public Employees getTaskFromEmployees() {
+        return taskFromEmployees;
+    }
+
+    public void setTaskFromEmployees(Employees taskFromEmployees) {
+        this.taskFromEmployees = taskFromEmployees;
+    }
 }

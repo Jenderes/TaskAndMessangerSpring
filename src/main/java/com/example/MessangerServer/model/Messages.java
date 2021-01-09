@@ -17,10 +17,13 @@ public class Messages {
     private Date  sendDate;
     private String typeMessage;
     @ManyToOne
-    @JoinColumns({
-            @JoinColumn(name="message_for_user_id", referencedColumnName="userId"),
-            @JoinColumn(name="message_from_user_id", referencedColumnName="userId")
-    })
+    @JoinColumn(name="messageForEmployee")
+    private Employees messageForEmployees;
+
+    @ManyToOne
+    @JoinColumn(name="messageFromEmployee")
+    private Employees messageFromEmployees;
+
     public String getTextMessage() {
         return textMessage;
     }
@@ -43,5 +46,21 @@ public class Messages {
 
     public void setTypeMessage(String typeMessage) {
         this.typeMessage = typeMessage;
+    }
+
+    public Employees getMessageForEmployees() {
+        return messageForEmployees;
+    }
+
+    public void setMessageForEmployees(Employees messageForEmployees) {
+        this.messageForEmployees = messageForEmployees;
+    }
+
+    public Employees getMessageFromEmployees() {
+        return messageFromEmployees;
+    }
+
+    public void setMessageFromEmployees(Employees messageFromEmployees) {
+        this.messageFromEmployees = messageFromEmployees;
     }
 }
