@@ -1,20 +1,18 @@
 package com.example.MessangerServer.model;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "GROUPS")
-public class Groups {
+public class Group {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long groupId;
     private String groupName;
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Employees> userListGroup;
-    @OneToMany(targetEntity=GroupMessages.class, mappedBy="messagesgroup")
+    private Set<Employee> userSetGroup;
+    @OneToMany(targetEntity = GroupMessages.class, mappedBy = "messagesgroup")
     private Set<GroupMessages> groupsMessage;
 
     public String getGroupName() {
@@ -25,12 +23,12 @@ public class Groups {
         this.groupName = groupName;
     }
 
-    public Set<Employees> getUserListGroup() {
-        return userListGroup;
+    public Set<Employee> getUserListGroup() {
+        return userSetGroup;
     }
 
-    public void setUserListGroup(Set<Employees> userListGroup) {
-        this.userListGroup = userListGroup;
+    public void setUserListGroup(Set<Employee> userListGroup) {
+        this.userSetGroup = userListGroup;
     }
 
     public Set<GroupMessages> getGroupsMessage() {

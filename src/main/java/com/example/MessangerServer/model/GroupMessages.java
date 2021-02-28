@@ -12,14 +12,14 @@ public class GroupMessages {
     private String groupMassageText;
 
     private String type_message;
-    @Temporal (TemporalType.DATE)
+    @Temporal(TemporalType.DATE)
     private Date sendDate;
     @ManyToOne
-    @JoinColumn(name="message_from_user_id")
-    private Employees employeesmessage;
+    @JoinColumn(name = "message_from_user_id")
+    private Employee employeesmessage;
     @ManyToOne
-    @JoinColumn(name="message_for_group_id")
-    private Groups messagesgroup;
+    @JoinColumn(name = "message_for_group_id")
+    private Group messagesgroup;
 
     public String getType_message() {
         return type_message;
@@ -37,11 +37,11 @@ public class GroupMessages {
         this.sendDate = sendDate;
     }
 
-    public Employees getEmployeesmessage() {
+    public Employee getEmployeesmessage() {
         return employeesmessage;
     }
 
-    public void setEmployeesmessage(Employees employeesmessage) {
+    public void setEmployeesmessage(Employee employeesmessage) {
         this.employeesmessage = employeesmessage;
     }
 
@@ -53,11 +53,11 @@ public class GroupMessages {
         this.groupMassageText = groupMassageText;
     }
 
-    public Groups getMessagesgroup() {
+    public Group getMessagesgroup() {
         return messagesgroup;
     }
 
-    public void setMessagesgroup(Groups messagesgroup) {
+    public void setMessagesgroup(Group messagesgroup) {
         this.messagesgroup = messagesgroup;
     }
 }

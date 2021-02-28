@@ -1,21 +1,22 @@
 package com.example.MessangerServer.model;
 
-import javax.persistence.Id;
-import javax.persistence.Transient;
+import javax.persistence.*;
+
 import org.springframework.security.core.GrantedAuthority;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "role")
-public class Role  implements GrantedAuthority {
+public class Role {
     @Id
     private Long id;
-    private String Name;
-    @Transient
-    private Set<Employees> employees;
+    private String name;
+
+
+    @ManyToMany(mappedBy = "roles", fetch = FetchType.EAGER)
+    private List<Employee> employees;
 
     public Role() {
     }
@@ -26,7 +27,7 @@ public class Role  implements GrantedAuthority {
 
     public Role(Long id, String name) {
         this.id = id;
-        Name = name;
+        name = name;
     }
 
     public Long getId() {
@@ -38,23 +39,25 @@ public class Role  implements GrantedAuthority {
     }
 
     public String getName() {
-        return Name;
+        return name;
     }
 
     public void setName(String name) {
-        Name = name;
+        this.name = name;
     }
 
-    public Set<Employees> getEmployees() {
+    public List<Employee> getEmployees() {
         return employees;
     }
 
-    public void setEmployees(Set<Employees> employees) {
+    public void setEmployees(List<Employee> employees) {
         this.employees = employees;
     }
 
     @Override
-    public String getAuthority() {
-        return null;
+    public String toString() {
+        return "Role{" +
+                "id: " + getId() + ", " +
+                "name: " + name + "}";
     }
 }

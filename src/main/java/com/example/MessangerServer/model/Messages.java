@@ -1,28 +1,27 @@
 package com.example.MessangerServer.model;
 
-import com.sun.istack.NotNull;
-
 import javax.persistence.*;
 import java.util.Date;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "MESSAGES")
 public class Messages {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long message_id;
+    private Long Id;
     private String textMessage;
-    @Temporal (TemporalType.DATE)
-    private Date  sendDate;
+    @Temporal(TemporalType.DATE)
+    private Date sendDate;
+
     private String typeMessage;
-    @ManyToOne
-    @JoinColumn(name="messageForEmployee")
-    private Employees messageForEmployees;
+
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private Set<Employee> employeesSetMessage;
 
     @ManyToOne
-    @JoinColumn(name="messageFromEmployee")
-    private Employees messageFromEmployees;
+    @JoinColumn(name = "messageFromEmployee")
+    private Employee messageFromEmployees;
 
     public String getTextMessage() {
         return textMessage;
@@ -48,19 +47,27 @@ public class Messages {
         this.typeMessage = typeMessage;
     }
 
-    public Employees getMessageForEmployees() {
-        return messageForEmployees;
+    public Long getId() {
+        return Id;
     }
 
-    public void setMessageForEmployees(Employees messageForEmployees) {
-        this.messageForEmployees = messageForEmployees;
+    public void setId(Long id) {
+        Id = id;
     }
 
-    public Employees getMessageFromEmployees() {
+    public Employee getMessageFromEmployees() {
         return messageFromEmployees;
     }
 
-    public void setMessageFromEmployees(Employees messageFromEmployees) {
+    public void setMessageFromEmployees(Employee messageFromEmployees) {
         this.messageFromEmployees = messageFromEmployees;
+    }
+
+    public Set<Employee> getEmployeesSetMessage() {
+        return employeesSetMessage;
+    }
+
+    public void setEmployeesSetMessage(Set<Employee> employeesSetMessage) {
+        this.employeesSetMessage = employeesSetMessage;
     }
 }

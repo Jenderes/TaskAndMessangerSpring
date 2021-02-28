@@ -1,7 +1,5 @@
 package com.example.MessangerServer.model;
 
-import com.sun.istack.NotNull;
-
 import javax.persistence.*;
 import java.util.Date;
 
@@ -10,20 +8,20 @@ import java.util.Date;
 public class Tasks {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long task_id;
+    private Long taskId;
     private String textTask;
-    @Temporal (TemporalType.DATE)
+    @Temporal(TemporalType.TIME)
     private Date sendDate;
-    @Temporal (TemporalType.DATE)
+    @Temporal(TemporalType.TIME)
     private Date endDate;
     private String status;
     @ManyToOne
-    @JoinColumn(name="sendTaskFor")
-    private Employees taskForEmployees;
+    @JoinColumn(name = "sendTaskId")
+    private Employee taskForEmployees;
 
     @ManyToOne
-    @JoinColumn(name="sendTaskFrom")
-    private Employees taskFromEmployees;
+    @JoinColumn(name = "sendTaskRecipient")
+    private Employee taskFromEmployees;
 
     public String getTextTask() {
         return textTask;
@@ -57,19 +55,19 @@ public class Tasks {
         this.status = status;
     }
 
-    public Employees getTaskForEmployees() {
+    public Employee getTaskForEmployees() {
         return taskForEmployees;
     }
 
-    public void setTaskForEmployees(Employees taskForEmployees) {
+    public void setTaskForEmployees(Employee taskForEmployees) {
         this.taskForEmployees = taskForEmployees;
     }
 
-    public Employees getTaskFromEmployees() {
+    public Employee getTaskFromEmployees() {
         return taskFromEmployees;
     }
 
-    public void setTaskFromEmployees(Employees taskFromEmployees) {
+    public void setTaskFromEmployees(Employee taskFromEmployees) {
         this.taskFromEmployees = taskFromEmployees;
     }
 }
