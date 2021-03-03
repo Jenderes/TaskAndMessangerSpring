@@ -63,7 +63,17 @@ public class AuthenticationRestController {
                     registerDto.getFirstName(),
                     registerDto.getLastName()
             ));
-            return ResponseEntity.ok("register complete");
+            String username = registerDto.getUsername();
+            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, registerDto.getPassword()));
+            Employee employee = userService.findByUsername(username);
+            if (employee == null) {
+                throw new UsernameNotFoundException("User not found");
+            }
+            String token = jwtTokenProvider.createToken(username, employee.getRoles());
+            Map<Object, Object> response = new HashMap<>();
+            response.put("username", username);
+            response.put("token", token);
+            return ResponseEntity.ok(response);
         } catch (AuthenticationServiceException exp) {
             throw new BadCredentialsException("Invalid username or password");
         }

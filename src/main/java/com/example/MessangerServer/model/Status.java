@@ -1,5 +1,5 @@
 package com.example.MessangerServer.model;
 
 public enum Status {
-    ACTIVE,DISABLE
+    ACTIVE,DISABLE,EXPIRED,COMPLETE
 }

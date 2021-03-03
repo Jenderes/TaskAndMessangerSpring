@@ -10,12 +10,13 @@ import java.util.*;
 @Table(name = "EMPLOYEE")
 public class Employee {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "user_id")
     private Long userId;
+
     private String username;
     private String password;
-    @Transient
-    private String passwordConfirm;
+
     private String firstName;
     private String lastName;
     private String middleName;
@@ -24,24 +25,32 @@ public class Employee {
     private String phone;
     @Enumerated(EnumType.STRING)
     private Status status;
-    @Temporal(TemporalType.DATE)
-    private Date leaveDate;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "taskForEmployees")
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "employee_task_geted",
+    joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
+    inverseJoinColumns = @JoinColumn(name = "task_id", referencedColumnName = "task_id"))
     private List<Tasks> taskFor;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "taskFromEmployees")
     private List<Tasks> taskFrom;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "messageFromEmployees")
     private List<Messages> messageFrom;
+
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Group> messageFor;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "ContactUserId")
     private List<Contact> contactFor;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "ContactReceivedId")
     private List<Contact> contactFrom;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "requestForEmployees")
     private List<Request> requestsFor;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "requestFromEmployees")
     private List<Request> requestsFrom;
+
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Group> SetGroupsUser;
     @OneToMany(fetch = FetchType.LAZY, targetEntity = GroupMessages.class, mappedBy = "messagesgroup")
@@ -81,14 +90,6 @@ public class Employee {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getPasswordConfirm() {
-        return passwordConfirm;
-    }
-
-    public void setPasswordConfirm(String passwordConfirm) {
-        this.passwordConfirm = passwordConfirm;
     }
 
     public String getFirstName() {
@@ -137,14 +138,6 @@ public class Employee {
 
     public void setPhone(String phone) {
         this.phone = phone;
-    }
-
-    public Date getLeaveDate() {
-        return leaveDate;
-    }
-
-    public void setLeaveDate(Date leaveDate) {
-        this.leaveDate = leaveDate;
     }
 
     public List<Tasks> getTaskFor() {

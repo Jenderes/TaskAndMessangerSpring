@@ -2,25 +2,30 @@ package com.example.MessangerServer.model;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "TASKS")
 public class Tasks {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "task_id")
     private Long taskId;
     private String textTask;
+    private String textBody;
     @Temporal(TemporalType.TIME)
     private Date sendDate;
     @Temporal(TemporalType.TIME)
     private Date endDate;
-    private String status;
-    @ManyToOne
-    @JoinColumn(name = "sendTaskId")
-    private Employee taskForEmployees;
+    @Enumerated(EnumType.STRING)
+    private Status taskStatus;
 
-    @ManyToOne
-    @JoinColumn(name = "sendTaskRecipient")
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "sender_task_id")
+    private List<Employee> taskForEmployees;
+
+    @ManyToOne()
+    @JoinColumn(name = "get_task_id")
     private Employee taskFromEmployees;
 
     public String getTextTask() {
@@ -47,20 +52,12 @@ public class Tasks {
         this.endDate = endDate;
     }
 
-    public String getStatus() {
-        return status;
+    public Status getTaskStatus() {
+        return taskStatus;
     }
 
-    public void setStatus(String status) {
-        this.status = status;
-    }
-
-    public Employee getTaskForEmployees() {
-        return taskForEmployees;
-    }
-
-    public void setTaskForEmployees(Employee taskForEmployees) {
-        this.taskForEmployees = taskForEmployees;
+    public void setTaskStatus(Status taskStatus) {
+        this.taskStatus = taskStatus;
     }
 
     public Employee getTaskFromEmployees() {
@@ -69,5 +66,29 @@ public class Tasks {
 
     public void setTaskFromEmployees(Employee taskFromEmployees) {
         this.taskFromEmployees = taskFromEmployees;
+    }
+
+    public List<Employee> getTaskForEmployees() {
+        return taskForEmployees;
+    }
+
+    public void setTaskForEmployees(List<Employee> taskForEmployees) {
+        this.taskForEmployees = taskForEmployees;
+    }
+
+    public Long getTaskId() {
+        return taskId;
+    }
+
+    public void setTaskId(Long taskId) {
+        this.taskId = taskId;
+    }
+
+    public String getTextBody() {
+        return textBody;
+    }
+
+    public void setTextBody(String textBody) {
+        this.textBody = textBody;
     }
 }

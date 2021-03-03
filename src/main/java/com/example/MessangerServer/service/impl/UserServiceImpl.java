@@ -1,12 +1,16 @@
-package com.example.MessangerServer.service;
+package com.example.MessangerServer.service.impl;
 
 import com.example.MessangerServer.model.Employee;
 import com.example.MessangerServer.model.Role;
 import com.example.MessangerServer.model.Status;
+import com.example.MessangerServer.model.Tasks;
 import com.example.MessangerServer.repository.EmployeeRepository;
 import com.example.MessangerServer.repository.RoleRepository;
+import com.example.MessangerServer.repository.TasksRepository;
+import com.example.MessangerServer.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.config.Task;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -15,17 +19,17 @@ import java.util.*;
 @Service
 @Slf4j
 public class UserServiceImpl implements UserService {
-    @Autowired
-    private EmployeeRepository employeeRepository;
-    @Autowired
-    RoleRepository roleRepository;
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    private final EmployeeRepository employeeRepository;
+    private final RoleRepository  roleRepository;
+    private final TasksRepository tasksRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserServiceImpl(EmployeeRepository employeeRepository, RoleRepository roleRepository, BCryptPasswordEncoder bCryptPasswordEncoder){
+    public UserServiceImpl(EmployeeRepository employeeRepository, RoleRepository roleRepository, TasksRepository tasksRepository, BCryptPasswordEncoder bCryptPasswordEncoder){
         this.roleRepository = roleRepository;
         this.employeeRepository = employeeRepository;
+        this.tasksRepository = tasksRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
@@ -67,11 +71,10 @@ public class UserServiceImpl implements UserService {
         log.info("IN existsByUsername: {} foundByUsername: {}",result,username);
         return employeeRepository.existsByUsername(username);
     }
-
-    // Добавить логирование на проверку удаления
+    
     @Override
     public Employee findById(Long id) {
-        Employee result = findById(id);
+        Employee result = employeeRepository.findByUserId(id);
         log.info("IN findById - employee: {} foundById : {}",result,id);
         return result;
     }
@@ -82,5 +85,28 @@ public class UserServiceImpl implements UserService {
             employeeRepository.deleteById(id);
             log.info("IN delete - user with id: {} successfully deleted",id);
         }
+    }
+
+    @Override
+    public List<Object[]> findFullNameByUsername(String username) {
+        List<Object[]> contacts = employeeRepository.getEmployeeListFullNameContact(username);
+        log.info("IN getEmployeeListFullNameContact - list: {} foundByUsername: {}",contacts,username);
+        return contacts;
+    }
+
+    @Override
+    public List<Tasks> findTaskSendByUsername(String username) {
+        Employee empl = findByUsername(username);
+        List<Tasks> taskList = empl.getTaskFrom();
+        log.info("IN findTaskSendByUsername - List: {} By username: {}",taskList.toString(),username);
+        return taskList;
+    }
+
+    @Override
+    public List<Tasks> findTaskGetByUsername(String username) {
+        Employee empl = findByUsername(username);
+        List<Tasks> taskList = empl.getTaskFor();
+        log.info("IN findTaskGetByUsername - List: {} By username: {}",taskList.toString(),username);
+        return taskList;
     }
 }

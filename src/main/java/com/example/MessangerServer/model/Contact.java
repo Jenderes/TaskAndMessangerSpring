@@ -11,11 +11,11 @@ public class Contact {
 
     private String status;
     @ManyToOne
-    @JoinColumn(name="ContactUserId")
+    @JoinColumn(name="contact_employee_id")
     private Employee ContactUserId;
 
     @ManyToOne
-    @JoinColumn(name="ReceivedId")
+    @JoinColumn(name="received_employee_id")
     private Employee ContactReceivedId;
 
     public String getStatus() {
