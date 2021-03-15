@@ -7,6 +7,7 @@ import org.apache.catalina.User;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserDto {
     private Long id;
+    private String email;
     private String username;
     private String firstName;
     private String lastName;
@@ -26,6 +27,15 @@ public class UserDto {
         userDto.setLastName(employee.getLastName());
         return userDto;
     }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
     public Long getId() {
         return id;
     }

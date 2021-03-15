@@ -13,18 +13,23 @@ public class Tasks {
     private Long taskId;
     private String textTask;
     private String textBody;
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.DATE)
     private Date sendDate;
-    @Temporal(TemporalType.TIME)
+    @Temporal(TemporalType.DATE)
     private Date endDate;
     @Enumerated(EnumType.STRING)
     private Status taskStatus;
+    @Enumerated(EnumType.STRING)
+    private WorkVariant workVariant;
 
+    //TODO: change column name reverse
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "sender_task_id")
+    @JoinTable(name = "employee_task_get",
+            joinColumns = @JoinColumn(name = "task_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id"))
     private List<Employee> taskForEmployees;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "get_task_id")
     private Employee taskFromEmployees;
 
@@ -90,5 +95,13 @@ public class Tasks {
 
     public void setTextBody(String textBody) {
         this.textBody = textBody;
+    }
+
+    public WorkVariant getWorkVariant() {
+        return workVariant;
+    }
+
+    public void setWorkVariant(WorkVariant workVariant) {
+        this.workVariant = workVariant;
     }
 }

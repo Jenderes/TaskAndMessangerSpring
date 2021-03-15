@@ -1,9 +1,11 @@
 package com.example.MessangerServer.service;
 
+import com.example.MessangerServer.dto.StatisticDto;
 import com.example.MessangerServer.model.Employee;
 import com.example.MessangerServer.model.Tasks;
 
 import java.util.List;
+import java.util.Map;
 
 public interface UserService {
      Employee register(Employee employee);
@@ -14,13 +16,11 @@ public interface UserService {
 
      boolean existsByUsername(String username);
 
+     boolean existsByEmail(String email);
+
      Employee findById(Long id);
 
      void delete(Long id);
 
-     List<Object[]> findFullNameByUsername(String username);
-
-     List<Tasks> findTaskSendByUsername(String username);
-
-     List<Tasks> findTaskGetByUsername(String username);
+     List<Employee> findContactsByUsername(String username);
 }

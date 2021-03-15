@@ -1,6 +1,7 @@
 package com.example.MessangerServer.rest;
 
 
+import com.example.MessangerServer.dto.StatisticDto;
 import com.example.MessangerServer.dto.TaskDto;
 import com.example.MessangerServer.model.Employee;
 import com.example.MessangerServer.model.Status;
@@ -18,6 +19,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping(value = "/api/task/")
 public class TaskRestController {
@@ -35,7 +37,7 @@ public class TaskRestController {
     public List<TaskDto> getAllTaskSendEmployee(HttpServletRequest request){
         String resolveToken = jwtTokenProvider.resolveToken(request);
         String username = jwtTokenProvider.getUserName(resolveToken);
-        return userService.findTaskSendByUsername(username).stream().map( task -> {
+        return taskService.findTaskSendByUsername(username).stream().map( task -> {
             final TaskDto taskDto = new TaskDto();
             taskDto.setId(task.getTaskId());
             taskDto.setTaskHead(task.getTextTask());
@@ -50,7 +52,7 @@ public class TaskRestController {
     public List<TaskDto> getAllTaskGetEmployee(HttpServletRequest request){
         String resolveToken = jwtTokenProvider.resolveToken(request);
         String username = jwtTokenProvider.getUserName(resolveToken);
-        return userService.findTaskGetByUsername(username).stream().map( task -> {
+        return taskService.findTaskGetByUsername(username).stream().map( task -> {
             final TaskDto taskDto = new TaskDto();
             taskDto.setId(task.getTaskId());
             taskDto.setTaskHead(task.getTextTask());
@@ -75,6 +77,7 @@ public class TaskRestController {
         tasks.setTaskFromEmployees(sentEmployee);
         tasks.setSendDate(taskDto.getDateStart());
         tasks.setEndDate(taskDto.getDateEnd());
+        tasks.setWorkVariant(taskDto.getWorkVariant());
         taskService.saveTask(tasks);
         return ResponseEntity.ok("Task save");
     }

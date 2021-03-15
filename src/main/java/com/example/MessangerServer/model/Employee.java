@@ -17,6 +17,8 @@ public class Employee {
     private String username;
     private String password;
 
+    private String email;
+
     private String firstName;
     private String lastName;
     private String middleName;
@@ -26,10 +28,7 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "employee_task_geted",
-    joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"),
-    inverseJoinColumns = @JoinColumn(name = "task_id", referencedColumnName = "task_id"))
+    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "taskForEmployees")
     private List<Tasks> taskFor;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "taskFromEmployees")
@@ -61,8 +60,9 @@ public class Employee {
 
     public Employee () {}
 
-    public Employee(String username, String password, String firstName, String lastName) {
+    public Employee(String username, String email, String password, String firstName, String lastName) {
         this.username = username;
+        this.email = email;
         this.password = password;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -234,5 +234,14 @@ public class Employee {
 
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }

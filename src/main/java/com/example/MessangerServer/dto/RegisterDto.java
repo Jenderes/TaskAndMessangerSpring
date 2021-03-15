@@ -1,10 +1,19 @@
 package com.example.MessangerServer.dto;
 
 public class RegisterDto {
+    private String email;
     private String username;
     private String password;
     private String firstName;
     private String lastName;
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
     public String getUsername() {
         return username;

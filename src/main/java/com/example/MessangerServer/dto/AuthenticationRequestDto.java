@@ -1,7 +1,6 @@
 package com.example.MessangerServer.dto;
 
 public class AuthenticationRequestDto {
-    private Long id;
     private String username;
     private String password;
 
@@ -19,13 +18,5 @@ public class AuthenticationRequestDto {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 }

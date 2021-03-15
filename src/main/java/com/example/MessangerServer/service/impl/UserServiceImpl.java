@@ -1,9 +1,8 @@
 package com.example.MessangerServer.service.impl;
 
-import com.example.MessangerServer.model.Employee;
-import com.example.MessangerServer.model.Role;
-import com.example.MessangerServer.model.Status;
-import com.example.MessangerServer.model.Tasks;
+import com.example.MessangerServer.dto.ContactsDto;
+import com.example.MessangerServer.dto.StatisticDto;
+import com.example.MessangerServer.model.*;
 import com.example.MessangerServer.repository.EmployeeRepository;
 import com.example.MessangerServer.repository.RoleRepository;
 import com.example.MessangerServer.repository.TasksRepository;
@@ -15,6 +14,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Service
 @Slf4j
@@ -38,11 +39,6 @@ public class UserServiceImpl implements UserService {
         Role role = roleRepository.findByName("ROLE_USER");
         List<Role> employeeRole = new ArrayList<>();
         employeeRole.add(role);
-
-        Employee employeeCheckUsername = employeeRepository.findByUsername(employee.getUsername());
-        if (employeeCheckUsername != null) {
-            return null;
-        }
         employee.setPassword(bCryptPasswordEncoder.encode(employee.getPassword()));
         employee.setRoles(employeeRole);
         employee.setStatus(Status.ACTIVE);
@@ -71,7 +67,14 @@ public class UserServiceImpl implements UserService {
         log.info("IN existsByUsername: {} foundByUsername: {}",result,username);
         return employeeRepository.existsByUsername(username);
     }
-    
+
+    @Override
+    public boolean existsByEmail(String email) {
+        boolean result = employeeRepository.existsByEmail(email);
+        log.info("IN existsByEmail: {} foundByUsername: {}",result,email);
+        return employeeRepository.existsByUsername(email);
+    }
+
     @Override
     public Employee findById(Long id) {
         Employee result = employeeRepository.findByUserId(id);
@@ -88,25 +91,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<Object[]> findFullNameByUsername(String username) {
-        List<Object[]> contacts = employeeRepository.getEmployeeListFullNameContact(username);
-        log.info("IN getEmployeeListFullNameContact - list: {} foundByUsername: {}",contacts,username);
-        return contacts;
+    public List<Employee> findContactsByUsername(String username) {
+        Employee employee = employeeRepository.findByUsername(username);
+        log.info("IN findByUsername - employee: {} found by username : {}",employee,username);
+        List<Contact> allContacts = Stream.concat(employee.getContactFor().stream(),employee.getContactFrom().stream()).distinct().collect(Collectors.toList());
+        List<Employee> ContacGet = allContacts.stream().map(Contact::getContactReceivedId).filter(employees -> !employees.getUsername().equals(username)).collect(Collectors.toList());
+        List<Employee> ContactSet = allContacts.stream().map(Contact::getContactUserId).filter(employees -> !employees.getUsername().equals(username)).collect(Collectors.toList());
+        return Stream.concat(ContacGet.stream(),ContactSet.stream()).distinct().collect(Collectors.toList());
     }
 
-    @Override
-    public List<Tasks> findTaskSendByUsername(String username) {
-        Employee empl = findByUsername(username);
-        List<Tasks> taskList = empl.getTaskFrom();
-        log.info("IN findTaskSendByUsername - List: {} By username: {}",taskList.toString(),username);
-        return taskList;
-    }
-
-    @Override
-    public List<Tasks> findTaskGetByUsername(String username) {
-        Employee empl = findByUsername(username);
-        List<Tasks> taskList = empl.getTaskFor();
-        log.info("IN findTaskGetByUsername - List: {} By username: {}",taskList.toString(),username);
-        return taskList;
-    }
 }

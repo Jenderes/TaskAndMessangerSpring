@@ -1,5 +1,7 @@
 package com.example.MessangerServer.dto;
 
+import com.example.MessangerServer.model.Status;
+import com.example.MessangerServer.model.WorkVariant;
 import org.hibernate.exception.DataException;
 
 import java.util.Date;
@@ -11,6 +13,7 @@ public class TaskDto {
     private Date dateStart;
     private Date dateEnd;
     private String taskHead;
+    private WorkVariant workVariant;
     private String taskDescription;
     private Long[] tasGetEmployeeId;
 
@@ -60,5 +63,13 @@ public class TaskDto {
 
     public void setTasGetEmployeeId(Long[] tasGetEmployeeId) {
         this.tasGetEmployeeId = tasGetEmployeeId;
+    }
+
+    public WorkVariant getWorkVariant() {
+        return workVariant;
+    }
+
+    public void setWorkVariant(WorkVariant workVariant) {
+        this.workVariant = workVariant;
     }
 }
