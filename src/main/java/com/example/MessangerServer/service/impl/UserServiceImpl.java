@@ -1,15 +1,13 @@
 package com.example.MessangerServer.service.impl;
 
-import com.example.MessangerServer.dto.ContactsDto;
-import com.example.MessangerServer.dto.StatisticDto;
 import com.example.MessangerServer.model.*;
+import com.example.MessangerServer.repository.ContactsRepository;
 import com.example.MessangerServer.repository.EmployeeRepository;
 import com.example.MessangerServer.repository.RoleRepository;
 import com.example.MessangerServer.repository.TasksRepository;
 import com.example.MessangerServer.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.config.Task;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,14 +21,14 @@ public class UserServiceImpl implements UserService {
 
     private final EmployeeRepository employeeRepository;
     private final RoleRepository  roleRepository;
-    private final TasksRepository tasksRepository;
+    private final ContactsRepository contactsRepository;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
-    public UserServiceImpl(EmployeeRepository employeeRepository, RoleRepository roleRepository, TasksRepository tasksRepository, BCryptPasswordEncoder bCryptPasswordEncoder){
+    public UserServiceImpl(EmployeeRepository employeeRepository, RoleRepository roleRepository, ContactsRepository contactsRepository, BCryptPasswordEncoder bCryptPasswordEncoder){
         this.roleRepository = roleRepository;
         this.employeeRepository = employeeRepository;
-        this.tasksRepository = tasksRepository;
+        this.contactsRepository = contactsRepository;
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
     }
 
@@ -98,6 +96,12 @@ public class UserServiceImpl implements UserService {
         List<Employee> ContacGet = allContacts.stream().map(Contact::getContactReceivedId).filter(employees -> !employees.getUsername().equals(username)).collect(Collectors.toList());
         List<Employee> ContactSet = allContacts.stream().map(Contact::getContactUserId).filter(employees -> !employees.getUsername().equals(username)).collect(Collectors.toList());
         return Stream.concat(ContacGet.stream(),ContactSet.stream()).distinct().collect(Collectors.toList());
+    }
+
+    @Override
+    public void saveContactFromUser(Employee employeeOwn, Employee employeeContact) {
+        Contact contact = new Contact(Status.COMPLETE, employeeOwn, employeeContact);
+        contactsRepository.save(contact);
     }
 
 }

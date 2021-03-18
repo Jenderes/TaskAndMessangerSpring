@@ -9,7 +9,8 @@ public class Contact {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long contactId;
 
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private Status status;
     @ManyToOne
     @JoinColumn(name="contact_employee_id")
     private Employee ContactUserId;
@@ -18,11 +19,17 @@ public class Contact {
     @JoinColumn(name="received_employee_id")
     private Employee ContactReceivedId;
 
-    public String getStatus() {
+    public Contact(Status status, Employee contactUserId, Employee contactReceivedId) {
+        this.status = status;
+        ContactUserId = contactUserId;
+        ContactReceivedId = contactReceivedId;
+    }
+
+    public Status getStatus() {
         return status;
     }
 
-    public void setStatus(String status) {
+    public void setStatus(Status status) {
         this.status = status;
     }
 

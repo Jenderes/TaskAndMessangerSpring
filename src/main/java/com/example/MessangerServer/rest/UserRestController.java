@@ -1,7 +1,9 @@
 package com.example.MessangerServer.rest;
 
 import com.example.MessangerServer.dto.ContactsDto;
+import com.example.MessangerServer.dto.ProfileDto;
 import com.example.MessangerServer.dto.StatisticDto;
+import com.example.MessangerServer.model.Employee;
 import com.example.MessangerServer.security.jwt.JwtTokenProvider;
 import com.example.MessangerServer.service.TaskService;
 import com.example.MessangerServer.service.UserService;
@@ -43,6 +45,24 @@ public class UserRestController {
         )).collect(Collectors.toList());
         return ResponseEntity.ok(contactsDto);
     }
+    @GetMapping("contacts/add/{id}")
+    public ResponseEntity<?> setContacts(HttpServletRequest request, @PathVariable(name = "id") Long id){
+        String resolveToken = jwtTokenProvider.resolveToken(request);
+        String username = jwtTokenProvider.getUserName(resolveToken);
+        Employee employeeOwn = userService.findByUsername(username);
+        Employee employeeContact = userService.findById(id);
+        userService.saveContactFromUser(employeeOwn, employeeContact);
+        return ResponseEntity.ok("contact added");
+    }
+    @GetMapping("{id}")
+    public ResponseEntity<?> OpenPublicUserProfile(@PathVariable(name = "id") Long id){
+        Employee empl = userService.findById(id);
+        return ResponseEntity.ok(new ProfileDto(
+             empl.getFirstName(),
+             empl.getLastName(),
+             empl.getEmail()
+        ));
+    }
     @GetMapping("statistic")
     public ResponseEntity<?> getStatistic(HttpServletRequest request){
         String resolveToken = jwtTokenProvider.resolveToken(request);
@@ -50,4 +70,5 @@ public class UserRestController {
         StatisticDto statisticDto = taskService.findCountTaskByUsername(username);
         return ResponseEntity.ok(statisticDto);
     }
+
 }

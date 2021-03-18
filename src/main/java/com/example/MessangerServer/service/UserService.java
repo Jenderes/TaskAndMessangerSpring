@@ -2,6 +2,7 @@ package com.example.MessangerServer.service;
 
 import com.example.MessangerServer.dto.StatisticDto;
 import com.example.MessangerServer.model.Employee;
+import com.example.MessangerServer.model.Status;
 import com.example.MessangerServer.model.Tasks;
 
 import java.util.List;
@@ -23,4 +24,6 @@ public interface UserService {
      void delete(Long id);
 
      List<Employee> findContactsByUsername(String username);
+
+     void saveContactFromUser(Employee employeeOwn, Employee employeeContact);
 }
