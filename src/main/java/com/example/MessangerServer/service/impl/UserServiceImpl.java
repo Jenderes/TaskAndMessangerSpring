@@ -93,9 +93,9 @@ public class UserServiceImpl implements UserService {
         Employee employee = employeeRepository.findByUsername(username);
         log.info("IN findByUsername - employee: {} found by username : {}",employee,username);
         List<Contact> allContacts = Stream.concat(employee.getContactFor().stream(),employee.getContactFrom().stream()).distinct().collect(Collectors.toList());
-        List<Employee> ContacGet = allContacts.stream().map(Contact::getContactReceivedId).filter(employees -> !employees.getUsername().equals(username)).collect(Collectors.toList());
+        List<Employee> ContactGet = allContacts.stream().map(Contact::getContactReceivedId).filter(employees -> !employees.getUsername().equals(username)).collect(Collectors.toList());
         List<Employee> ContactSet = allContacts.stream().map(Contact::getContactUserId).filter(employees -> !employees.getUsername().equals(username)).collect(Collectors.toList());
-        return Stream.concat(ContacGet.stream(),ContactSet.stream()).distinct().collect(Collectors.toList());
+        return Stream.concat(ContactGet.stream(),ContactSet.stream()).distinct().collect(Collectors.toList());
     }
 
     @Override

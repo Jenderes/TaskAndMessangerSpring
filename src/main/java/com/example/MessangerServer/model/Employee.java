@@ -42,16 +42,19 @@ public class Employee {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "ContactUserId")
     private List<Contact> contactFor;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "ContactReceivedId")
     private List<Contact> contactFrom;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "requestForEmployees")
     private List<Request> requestsFor;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "requestFromEmployees")
     private List<Request> requestsFrom;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Group> SetGroupsUser;
+
     @OneToMany(fetch = FetchType.LAZY, targetEntity = GroupMessages.class, mappedBy = "messagesgroup")
     private List<GroupMessages> employeeMessagesGroup;
 

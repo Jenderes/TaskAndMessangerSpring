@@ -3,14 +3,18 @@ package com.example.MessangerServer.model;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "CONTACTS")
+@Table(name = "CONTACT")
 public class Contact {
+    public Contact() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long contactId;
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
     @ManyToOne
     @JoinColumn(name="contact_employee_id")
     private Employee ContactUserId;
