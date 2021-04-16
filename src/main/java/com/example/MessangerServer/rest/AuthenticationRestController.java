@@ -64,9 +64,9 @@ public class AuthenticationRestController {
     public ResponseEntity<?> register(@RequestBody RegisterDto registerDto) {
         try {
             ResponseEntity<?> responseEntity;
-            if (!userService.existsByUsername(registerDto.getUsername())){
+            if (userService.existsByUsername(registerDto.getUsername())){
                 responseEntity = ResponseEntity.badRequest().body(new MessageDto("Пользователь с таким именен уже зарегистрирован"));
-            } else if (!userService.existsByEmail(registerDto.getEmail())){
+            } else if (userService.existsByEmail(registerDto.getEmail())){
                 responseEntity = ResponseEntity.badRequest().body(new MessageDto("Пользователь с таким email уже зарегистрирован"));
             } else {
                 userService.register(new Employee(

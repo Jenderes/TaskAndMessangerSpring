@@ -1,5 +1,7 @@
 package com.example.MessangerServer.model;
 
+import com.example.MessangerServer.dto.TaskDto;
+
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -103,5 +105,18 @@ public class Tasks {
 
     public void setWorkVariant(WorkVariant workVariant) {
         this.workVariant = workVariant;
+    }
+
+    public TaskDto convertTaskToTaskDTO () {
+        final TaskDto taskDto = new TaskDto();
+        taskDto.setId(this.getTaskId());
+        taskDto.setTaskHead(this.getTextTask());
+        taskDto.setTaskDescription(this.getTextBody());
+        taskDto.setDateStart(this.getSendDate());
+        taskDto.setDateEnd(this.getEndDate());
+        taskDto.setWorkVariant(this.getWorkVariant());
+        Employee employeeSender = this.getTaskFromEmployees();
+        taskDto.setTaskFullNameSender(employeeSender.getFirstName() + " " + employeeSender.getLastName());
+        return taskDto;
     }
 }

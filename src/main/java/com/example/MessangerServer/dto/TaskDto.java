@@ -1,8 +1,11 @@
 package com.example.MessangerServer.dto;
 
+import com.example.MessangerServer.model.Employee;
 import com.example.MessangerServer.model.Status;
+import com.example.MessangerServer.model.Tasks;
 import com.example.MessangerServer.model.WorkVariant;
 import org.hibernate.exception.DataException;
+import org.springframework.scheduling.config.Task;
 
 import java.util.Date;
 import java.util.List;
@@ -15,7 +18,8 @@ public class TaskDto {
     private String taskHead;
     private WorkVariant workVariant;
     private String taskDescription;
-    private Long[] tasGetEmployeeId;
+    private String taskFullNameSender;
+    private Long[] taskGetEmployeeId;
 
     public Long getId() {
         return id;
@@ -57,12 +61,12 @@ public class TaskDto {
         this.taskDescription = taskDescription;
     }
 
-    public Long[] getTasGetEmployeeId() {
-        return tasGetEmployeeId;
+    public Long[] getTaskGetEmployeeId() {
+        return taskGetEmployeeId;
     }
 
-    public void setTasGetEmployeeId(Long[] tasGetEmployeeId) {
-        this.tasGetEmployeeId = tasGetEmployeeId;
+    public void setTaskGetEmployeeId(Long[] tasGetEmployeeId) {
+        this.taskGetEmployeeId = tasGetEmployeeId;
     }
 
     public WorkVariant getWorkVariant() {
@@ -71,5 +75,13 @@ public class TaskDto {
 
     public void setWorkVariant(WorkVariant workVariant) {
         this.workVariant = workVariant;
+    }
+
+    public String getTaskFullNameSender() {
+        return taskFullNameSender;
+    }
+
+    public void setTaskFullNameSender(String taskFullNameSender) {
+        this.taskFullNameSender = taskFullNameSender;
     }
 }

@@ -63,14 +63,14 @@ public class UserServiceImpl implements UserService {
     public boolean existsByUsername(String username) {
         boolean result = employeeRepository.existsByUsername(username);
         log.info("IN existsByUsername: {} foundByUsername: {}",result,username);
-        return employeeRepository.existsByUsername(username);
+        return result;
     }
 
     @Override
     public boolean existsByEmail(String email) {
         boolean result = employeeRepository.existsByEmail(email);
         log.info("IN existsByEmail: {} foundByUsername: {}",result,email);
-        return employeeRepository.existsByUsername(email);
+        return result;
     }
 
     @Override

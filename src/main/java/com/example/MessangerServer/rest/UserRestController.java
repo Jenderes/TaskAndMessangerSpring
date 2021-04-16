@@ -46,6 +46,7 @@ public class UserRestController {
         )).collect(Collectors.toList());
         return contactsDto;
     }
+
     @GetMapping("contacts/add/{id}")
     public ResponseEntity<?> setContacts(HttpServletRequest request, @PathVariable(name = "id") Long id){
         String resolveToken = jwtTokenProvider.resolveToken(request);
@@ -55,16 +56,20 @@ public class UserRestController {
         userService.saveContactFromUser(employeeOwn, employeeContact);
         return ResponseEntity.ok("contact added");
     }
-    @GetMapping("{id}")
+
+    @GetMapping("get/{id}")
     public ResponseEntity<?> OpenPublicUserProfile(@PathVariable(name = "id") Long id){
-        Employee empl = userService.findById(id);
-        return ResponseEntity.ok(new ProfileDto(
-             empl.getFirstName(),
-             empl.getLastName(),
-             empl.getEmail()
-        ));
+        Employee employee = userService.findById(id);
+        ProfileDto profileDto = new ProfileDto(
+                employee.getUsername(),
+                employee.getFirstName(),
+                employee.getLastName(),
+                employee.getEmail()
+        );
+        return ResponseEntity.ok(profileDto);
     }
-        @GetMapping("statistic")
+
+    @GetMapping("statistic")
     public ResponseEntity<?> getStatistic(HttpServletRequest request){
         String resolveToken = jwtTokenProvider.resolveToken(request);
         String username = jwtTokenProvider.getUserName(resolveToken);

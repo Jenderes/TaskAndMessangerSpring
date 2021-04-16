@@ -109,9 +109,16 @@ public class TaskServiceImpl  implements TaskService {
         );
         statisticDto.setCountAnalyseTask(
                 completeTask.stream()
-                        .filter(task -> task.getWorkVariant() == WorkVariant.ANALYSE)
+                        .filter(task -> task.getWorkVariant() == WorkVariant.TESTING)
                         .count()
         );
         return statisticDto;
     }
+
+    @Override
+    public List<Tasks> findTaskByUserNameWithFilter(String username, Status status, WorkVariant workVariant) {
+        Employee empl = employeeRepository.findByUsername(username);
+        return tasksRepository.findDistinctByTaskFromEmployeesAndTaskStatusAndWorkVariant(empl, status, workVariant);
+    }
+
 }

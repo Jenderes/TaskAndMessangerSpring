@@ -3,17 +3,15 @@ package com.example.MessangerServer.rest;
 
 import com.example.MessangerServer.dto.StatisticDto;
 import com.example.MessangerServer.dto.TaskDto;
-import com.example.MessangerServer.model.Employee;
-import com.example.MessangerServer.model.Status;
-import com.example.MessangerServer.model.Tasks;
+import com.example.MessangerServer.model.*;
 import com.example.MessangerServer.security.jwt.JwtTokenProvider;
 import com.example.MessangerServer.service.TaskService;
 import com.example.MessangerServer.service.UserService;
-import org.apache.coyote.Request;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -37,30 +35,17 @@ public class TaskRestController {
     public List<TaskDto> getAllTaskSendEmployee(HttpServletRequest request){
         String resolveToken = jwtTokenProvider.resolveToken(request);
         String username = jwtTokenProvider.getUserName(resolveToken);
-        return taskService.findTaskSendByUsername(username).stream().map( task -> {
-            final TaskDto taskDto = new TaskDto();
-            taskDto.setId(task.getTaskId());
-            taskDto.setTaskHead(task.getTextTask());
-            taskDto.setTaskDescription(task.getTextBody());
-            taskDto.setDateStart(task.getSendDate());
-            taskDto.setDateEnd(task.getEndDate());
-            return taskDto;
-        }).collect(Collectors.toList());
+        return taskService.findTaskSendByUsername(username).stream().map(Tasks::convertTaskToTaskDTO).collect(Collectors.toList());
 
     }
     @GetMapping("get")
     public List<TaskDto> getAllTaskGetEmployee(HttpServletRequest request){
         String resolveToken = jwtTokenProvider.resolveToken(request);
         String username = jwtTokenProvider.getUserName(resolveToken);
-        return taskService.findTaskGetByUsername(username).stream().map( task -> {
-            final TaskDto taskDto = new TaskDto();
-            taskDto.setId(task.getTaskId());
-            taskDto.setTaskHead(task.getTextTask());
-            taskDto.setTaskDescription(task.getTextBody());
-            taskDto.setDateStart(task.getSendDate());
-            taskDto.setDateEnd(task.getEndDate());
-            return taskDto;
-        }).collect(Collectors.toList());
+        return taskService.findTaskGetByUsername(username)
+                .stream()
+                .map(Tasks::convertTaskToTaskDTO)
+                .collect(Collectors.toList());
     }
     @PostMapping("save")
     public ResponseEntity<String> saveTask (HttpServletRequest request,
@@ -68,7 +53,10 @@ public class TaskRestController {
         String resolveToken = jwtTokenProvider.resolveToken(request);
         String username = jwtTokenProvider.getUserName(resolveToken);
         Employee sentEmployee = userService.findByUsername(username);
-        List<Employee> listEmployee = Arrays.stream(taskDto.getTasGetEmployeeId()).map(userService::findById).collect(Collectors.toList());
+        List<Employee> listEmployee = Arrays
+                .stream(taskDto.getTaskGetEmployeeId())
+                .map(userService::findById)
+                .collect(Collectors.toList());
         Tasks tasks = new Tasks();
         tasks.setTextTask(taskDto.getTaskHead());
         tasks.setTextBody(taskDto.getTaskDescription());
@@ -82,8 +70,23 @@ public class TaskRestController {
         return ResponseEntity.ok("Task save");
     }
     @PostMapping("change")
-    public ResponseEntity<String> changeStatusTask (@RequestParam(name = "id") Long id, @RequestParam(name = "status") Status status){
+    public ResponseEntity<String> changeStatusTask (
+            @RequestParam(name = "id") Long id,
+            @RequestParam(name = "status") Status status) {
+
         taskService.modify(id, status);
         return ResponseEntity.ok("Task change Status: "+ status);
+    }
+    //TODO доделать получения данных
+    @GetMapping("filter")
+    public List<TaskDto> getFilterTask (HttpServletRequest request,
+                                        @RequestParam(name = "status") Status status,
+                                        @RequestParam(name = "work") WorkVariant work) {
+        String resolveToken = jwtTokenProvider.resolveToken(request);
+        String username = jwtTokenProvider.getUserName(resolveToken);
+        return taskService.findTaskByUserNameWithFilter(username, status, work)
+                .stream()
+                .map(Tasks::convertTaskToTaskDTO)
+                .collect(Collectors.toList());
     }
 }
