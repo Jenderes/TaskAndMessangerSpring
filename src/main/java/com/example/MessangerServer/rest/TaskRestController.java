@@ -1,6 +1,7 @@
 package com.example.MessangerServer.rest;
 
 
+import com.example.MessangerServer.dto.MessageDto;
 import com.example.MessangerServer.dto.StatisticDto;
 import com.example.MessangerServer.dto.TaskDto;
 import com.example.MessangerServer.model.*;
@@ -48,7 +49,7 @@ public class TaskRestController {
                 .collect(Collectors.toList());
     }
     @PostMapping("save")
-    public ResponseEntity<String> saveTask (HttpServletRequest request,
+    public ResponseEntity<?> saveTask (HttpServletRequest request,
                                             @RequestBody TaskDto taskDto){
         String resolveToken = jwtTokenProvider.resolveToken(request);
         String username = jwtTokenProvider.getUserName(resolveToken);
@@ -67,7 +68,7 @@ public class TaskRestController {
         tasks.setEndDate(taskDto.getDateEnd());
         tasks.setWorkVariant(taskDto.getWorkVariant());
         taskService.saveTask(tasks);
-        return ResponseEntity.ok("Task save");
+        return ResponseEntity.ok(new MessageDto("Пользователь зарегистрирован"));
     }
     @PostMapping("change")
     public ResponseEntity<String> changeStatusTask (

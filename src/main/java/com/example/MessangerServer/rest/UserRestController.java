@@ -1,6 +1,7 @@
 package com.example.MessangerServer.rest;
 
 import com.example.MessangerServer.dto.ContactsDto;
+import com.example.MessangerServer.dto.MessageDto;
 import com.example.MessangerServer.dto.ProfileDto;
 import com.example.MessangerServer.dto.StatisticDto;
 import com.example.MessangerServer.model.Employee;
@@ -47,14 +48,14 @@ public class UserRestController {
         return contactsDto;
     }
 
-    @GetMapping("contacts/add/{id}")
+    @PostMapping("contacts/add/{id}")
     public ResponseEntity<?> setContacts(HttpServletRequest request, @PathVariable(name = "id") Long id){
         String resolveToken = jwtTokenProvider.resolveToken(request);
         String username = jwtTokenProvider.getUserName(resolveToken);
         Employee employeeOwn = userService.findByUsername(username);
         Employee employeeContact = userService.findById(id);
         userService.saveContactFromUser(employeeOwn, employeeContact);
-        return ResponseEntity.ok("contact added");
+        return ResponseEntity.ok(new MessageDto("contact added"));
     }
 
     @GetMapping("get/{id}")
