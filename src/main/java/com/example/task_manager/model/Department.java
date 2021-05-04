@@ -26,8 +26,12 @@ public class Department {
     @ManyToOne(fetch = FetchType.LAZY)
     private Projects projects;
 
-    @OneToOne(mappedBy = "taskDepartment")
-    private Tasks departmentTask;
+    public Department() {
+    }
+
+    public Department(String name) {
+        this.name = name;
+    }
 
     public long getDepartmentId() {
         return departmentId;
@@ -69,13 +73,6 @@ public class Department {
         this.projects = projects;
     }
 
-    public Department() {
-    }
-
-    public Department(String name) {
-        this.name = name;
-    }
-
     public WorkVariant getWorkDepartment() {
         return workDepartment;
     }
@@ -84,11 +81,10 @@ public class Department {
         this.workDepartment = workDepartment;
     }
 
-    public Tasks getDepartmentTask() {
-        return departmentTask;
-    }
-
-    public void setDepartmentTask(Tasks departmentTask) {
-        this.departmentTask = departmentTask;
+    @PreRemove
+    private void preRemove() {
+        for (Employee employee : getEmployeeDepartment()) {
+            employee.setDepartment(null);
+        }
     }
 }

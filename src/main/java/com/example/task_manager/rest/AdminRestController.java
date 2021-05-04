@@ -59,33 +59,48 @@ public class AdminRestController {
     @PostMapping("create_department")
     public ResponseEntity<?> creatDepartment(HttpServletRequest request,
                                              @RequestBody DepartmentDto departmentDto) {
-
+        adminService.createDepartment(departmentDto);
         return ResponseEntity.ok(new MessageDto("department_created"));
     }
 
     @PostMapping("create_project")
-    public ResponseEntity<?> createProject() {
-
+    public ResponseEntity<?> createProject(HttpServletRequest request,
+                                           @RequestBody ProjectDto projectDto) {
+        adminService.createProject(projectDto);
         return ResponseEntity.ok(new MessageDto("project_created"));
     }
 
-    public void addDepartmentInProject() {
-
+    @PostMapping("set_department")
+    public ResponseEntity<?> addDepartmentInProject(HttpServletRequest request,
+                                                    @RequestBody ProjectDto projectDto) {
+        adminService.setProjectToDepartmentByDepartmentID(projectDto.getProjectId(), projectDto.getDepartmentLIst());
+        return ResponseEntity.ok(new MessageDto("department set in project"));
     }
 
-    public void addEmployeeInDepartment() {
-
+    @PostMapping("set_employee")
+    public ResponseEntity<?> addEmployeeInDepartment(HttpServletRequest request,
+                                                     @RequestBody DepartmentDto departmentDto) {
+        adminService.setDepartmentToEmployeeByEmployeeId(departmentDto.getDepartmentId(), departmentDto.getListEmployeeId());
+        return ResponseEntity.ok(new MessageDto("employees set in department"));
     }
 
-    public void CloseProject() {
+    @PostMapping("close_project")
+    public ResponseEntity<?> CloseProject(HttpServletRequest request,
+                                          @RequestBody ProjectDto projectDto) {
 
+        return ResponseEntity.ok(new MessageDto(" set in project"));
     }
 
-    public void closeDepartment() {
+    @PostMapping("close_department")
+    public ResponseEntity<?> closeDepartment(HttpServletRequest request,
+                                             @RequestBody DepartmentDto departmentDto) {
 
+        return ResponseEntity.ok(new MessageDto("department set in project"));
     }
+    @PostMapping("delete_employee")
+    public ResponseEntity<?> deleteEmployee(HttpServletRequest request,
+                                            @RequestBody ProjectDto projectDto) {
 
-    public void deleteEmployee() {
-
+        return ResponseEntity.ok(new MessageDto("department set in project"));
     }
 }

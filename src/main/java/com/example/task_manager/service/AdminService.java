@@ -1,5 +1,7 @@
 package com.example.task_manager.service;
 
+import com.example.task_manager.dto.DepartmentDto;
+import com.example.task_manager.dto.ProjectDto;
 import com.example.task_manager.model.Department;
 import com.example.task_manager.model.Employee;
 import com.example.task_manager.model.Projects;
@@ -12,7 +14,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -29,51 +34,83 @@ public class AdminService {
         this.roleRepository = roleRepository;
     }
 
-    public void createProject(String name) {
-        Projects createProjects = new Projects(name);
-        projectRepository.save(createProjects);
+    public void createProject(ProjectDto projectDto) {
+
+        projectRepository.save(new Projects(projectDto.getProjectName()));
     }
 
-    public void createDepartment(String name) {
-        Department createDepartment = new Department();
-        departmentRepository.save(createDepartment);
+    public void createDepartment(DepartmentDto departmentDto) {
+
+        departmentRepository.save(new Department(departmentDto.getDepartmentName()));
     }
 
-    public void setDepartmentToEmployeeByEmployeeId(long departmentId, long employeeId) {
+    public void setDepartmentToEmployeeByEmployeeId(long departmentId, List<Long> employeeId) {
         Department department = departmentRepository.findDepartmentByDepartmentId(departmentId);
-        Employee employee = employeeRepository.findByUserId(employeeId);
-        employee.setDepartment(department);
-        employeeRepository.save(employee);
-    }
-
-    public void setProjectToDepartmentByDepartmentID(long projectId, long departmentId) {
-        Projects projects = projectRepository.findProjectByProjectId(projectId);
-        Department department = departmentRepository.findDepartmentByDepartmentId(departmentId);
-        department.setProjects(projects);
+        List<Employee> newDepartments = employeeId.stream()
+                .map(employeeRepository::findByUserId)
+                .collect(Collectors.toList());
+        List<Employee> employeeDepartment = department.getEmployeeDepartment();
+        if(employeeDepartment.size() != 0){
+            Set<Employee> employeeSet = new HashSet<>(employeeDepartment);
+            employeeSet.addAll(newDepartments);
+            department.setEmployeeDepartment(new ArrayList<>(employeeSet));
+        } else {
+            department.setEmployeeDepartment(newDepartments);
+        }
         departmentRepository.save(department);
+    }
+
+    public void setProjectToDepartmentByDepartmentID(long projectId, List<Long> departmentsId) {
+        Projects projects = projectRepository.findProjectByProjectId(projectId);
+        List<Department> departments = departmentsId.stream()
+                .map(departmentRepository::findDepartmentByDepartmentId)
+                .collect(Collectors.toList());
+        List<Department> departmentProject = projects.getProjectDepartment();
+        if (departmentProject.size() != 0) {
+            Set<Department> departmentSet = new HashSet<>(departmentProject);
+            departmentSet.addAll(departments);
+            projects.setProjectDepartment(new ArrayList<>(departmentSet));
+        } else {
+            projects.setProjectDepartment(departments);
+        }
+        projectRepository.save(projects);
     }
 
     public void setManagerDepartmentById(long departmentId, long employeeId) {
         Department department = departmentRepository.findDepartmentByDepartmentId(departmentId);
         Employee employee = employeeRepository.findByUserId(employeeId);
+        department.setDepartmentManager(employee);
+        departmentRepository.save(department);
     }
 
     public void setManagerProjectById(long projectId, long employeeId) {
         Projects projects = projectRepository.findProjectByProjectId(projectId);
         Employee employee = employeeRepository.findByUserId(employeeId);
+        projects.setProjectManager(employee);
+        projectRepository.save(projects);
     }
 
     public List<Employee> getDepartmentManagersWithoutDepartment() {
-        Role roleDM = roleRepository.findByName("ROLE_DM");
         List<Role> roles = new ArrayList<>();
-        roles.add(roleDM);
-        return employeeRepository.findEmployeesByDepartmentIsNull();
+        roles.add(roleRepository.findByName("ROLE_USER"));
+        roles.add(roleRepository.findByName("ROLE_DM"));
+        List<Employee> departmentManagerList = employeeRepository.findEmployeesByRoles(roles);
+        return departmentManagerList.stream()
+                .filter(departmentManager -> departmentManager.getManagerDepartment() == null)
+                .collect(Collectors.toList());
+    }
+
+    public List<Employee> getProjectManagersWithoutProject() {
+        List<Role> roles = new ArrayList<Role>();
+        roles.add(roleRepository.findByName("ROLE_USER"));
+        roles.add(roleRepository.findByName("ROLE_PM"));
+        List<Employee> projectManagerList = employeeRepository.findEmployeesByRoles(roles);
+        return projectManagerList.stream()
+                .filter(departmentManager -> departmentManager.getManagerProjects() == null)
+                .collect(Collectors.toList());
     }
 
     public List<Employee> getEmployeesWithoutDepartment() {
-        Role roleDM = roleRepository.findByName("ROLE_DM");
-        List<Role> roles = new ArrayList<>();
-        roles.add(roleDM);
         return employeeRepository.findEmployeesByDepartmentIsNull();
     }
 

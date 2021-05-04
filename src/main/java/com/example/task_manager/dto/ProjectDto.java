@@ -3,11 +3,14 @@ package com.example.task_manager.dto;
 import com.example.task_manager.model.Employee;
 import com.example.task_manager.model.Projects;
 
+import java.util.List;
+
 public class ProjectDto {
     private long projectId;
     private long projectManagerId;
     private String projectName;
     private String projectManagerFullName;
+    List<Long> departmentLIst;
 
     public long getProjectId() {
         return projectId;
@@ -49,5 +52,13 @@ public class ProjectDto {
         projectDto.projectManagerId = projectManager.getUserId();
         projectDto.projectManagerFullName = projectManager.getFirstName() +" "+projectManager.getLastName();
         return projectDto;
+    }
+
+    public List<Long> getDepartmentLIst() {
+        return departmentLIst;
+    }
+
+    public void setDepartmentLIst(List<Long> departmentLIst) {
+        this.departmentLIst = departmentLIst;
     }
 }

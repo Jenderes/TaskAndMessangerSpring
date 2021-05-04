@@ -35,14 +35,6 @@ public class Tasks {
     @JoinColumn(name = "get_task_id")
     private Employee taskFromEmployees;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "department_id")
-    private Department taskDepartment;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "project_id")
-    private Projects taskProjects;
-
     public String getTextTask() {
         return textTask;
     }
@@ -113,22 +105,6 @@ public class Tasks {
 
     public void setWorkVariant(WorkVariant workVariant) {
         this.workVariant = workVariant;
-    }
-
-    public Department getTaskDepartment() {
-        return taskDepartment;
-    }
-
-    public void setTaskDepartment(Department taskDepartment) {
-        this.taskDepartment = taskDepartment;
-    }
-
-    public Projects getTaskProjects() {
-        return taskProjects;
-    }
-
-    public void setTaskProjects(Projects taskProjects) {
-        this.taskProjects = taskProjects;
     }
 
     public TaskDto convertTaskToTaskDTO () {

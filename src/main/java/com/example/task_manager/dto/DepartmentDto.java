@@ -3,13 +3,15 @@ package com.example.task_manager.dto;
 import com.example.task_manager.model.Department;
 import com.example.task_manager.model.Employee;
 
+import java.util.List;
+
 //TODO: переписать DTO private и не по get и set
 public class DepartmentDto {
     long departmentId;
     String departmentName;
     long departmentManagerId;
     String managerFullName;
-
+    List<Long> listEmployeeId;
 
     public long getDepartmentId() {
         return departmentId;
@@ -51,5 +53,13 @@ public class DepartmentDto {
         departmentDto.setDepartmentManagerId(employee.getUserId());
         departmentDto.setManagerFullName(employee.getFirstName() + " " + employee.getLastName());
         return departmentDto;
+    }
+
+    public List<Long> getListEmployeeId() {
+        return listEmployeeId;
+    }
+
+    public void setListEmployeeId(List<Long> listEmployeeId) {
+        this.listEmployeeId = listEmployeeId;
     }
 }

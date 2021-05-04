@@ -21,9 +21,6 @@ public class Projects {
     @JoinColumn(name = "manager_project_id")
     private Employee projectManager;
 
-    @OneToOne(mappedBy = "taskProjects")
-    private Tasks projectTask;
-
     public long getProjectId() {
         return projectId;
     }
@@ -52,7 +49,7 @@ public class Projects {
         return projectManager;
     }
 
-    public void setDepartmentManager(Employee projectManager) {
+    public void setProjectManager(Employee projectManager) {
         this.projectManager = projectManager;
     }
 
@@ -63,4 +60,10 @@ public class Projects {
     public Projects() {
     }
 
+    @PreRemove
+    private void preRemove() {
+        for (Department department : getProjectDepartment()) {
+            department.setProjects(null);
+        }
+    }
 }

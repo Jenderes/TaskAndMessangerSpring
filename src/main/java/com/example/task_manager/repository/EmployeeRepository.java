@@ -22,4 +22,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     List<Employee> findEmployeesByDepartment(Department department);
 
     List<Employee> findEmployeesByDepartmentIsNull();
+
+    List<Employee> findEmployeesByRoles(List<Role> roles);
 }
