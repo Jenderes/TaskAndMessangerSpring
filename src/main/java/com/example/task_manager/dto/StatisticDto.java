@@ -1,7 +1,6 @@
 package com.example.task_manager.dto;
 
 public class StatisticDto {
-    private Long countTask;
     private Long countGetTask;
     private Long countSendTask;
     private Long countCompleteTask;
@@ -10,9 +9,7 @@ public class StatisticDto {
     private Long countBusinessTask;
     private Long countAnalyseTask;
 
-    public Long getCountTask() {
-        return this.getCountGetTask()+this.getCountSendTask();
-    }
+
     public Long getCountGetTask() {
         return countGetTask;
     }

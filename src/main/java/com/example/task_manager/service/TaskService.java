@@ -48,29 +48,28 @@ public class TaskService {
         log.info("Change status task:{} toStatus: {}", task, status);
     }
 
-    public List<EmployeeTaskDto> usersByTaskId(Long id) {
+    public EmployeeTaskDto recipientEmployeeByTaskId(Long id) {
         Tasks task = tasksRepository.findByTaskId(id);
-        List<Employee> employeeList = task.getTaskForEmployees();
-        List<EmployeeTaskDto> employeeDTO = employeeList.stream().map(employee ->
-            new EmployeeTaskDto(
-                    employee.getUserId(),
-                    employee.getFirstName(),
-                    employee.getFirstName()
-            )).collect(Collectors.toList());
+        Employee recipientEmployee = task.getRecipientEmployee();
+        EmployeeTaskDto employeeDTO = new EmployeeTaskDto(
+                recipientEmployee.getUserId(),
+                recipientEmployee.getFirstName(),
+                recipientEmployee.getFirstName()
+            );
         log.info("usersByTaskId list: {} to task id: {}", employeeDTO, id);
         return employeeDTO;
     }
 
-    public List<Tasks> findTaskSendByUsername(String username) {
+    public List<Tasks> findSentTasksByUsername(String username) {
         Employee empl = employeeRepository.findByUsername(username);
-        List<Tasks> taskList = empl.getTaskFrom();
+        List<Tasks> taskList = empl.getSentTasks();
         log.info("IN findTaskSendByUsername - List: {} By username: {}",taskList.toString(),username);
         return taskList;
     }
 
-    public List<Tasks> findTaskGetByUsername(String username) {
+    public List<Tasks> findReceivedTasksByUsername(String username) {
         Employee empl = employeeRepository.findByUsername(username);
-        List<Tasks> taskList = empl.getTaskFor();
+        List<Tasks> taskList = empl.getReceivedTasks();
         log.info("IN findTaskGetByUsername - List: {} By username: {}",taskList.toString(),username);
         return taskList;
     }
@@ -78,9 +77,9 @@ public class TaskService {
     public StatisticDto findCountTaskByUsername(String username) {
         StatisticDto statisticDto= new StatisticDto();
         Employee empl = employeeRepository.findByUsername(username);
-        List<Tasks> taskListFrom = empl.getTaskFrom();
+        List<Tasks> taskListFrom = empl.getReceivedTasks();
         statisticDto.setCountSendTask((long)taskListFrom.size());
-        List<Tasks> taskListFor = empl.getTaskFor();
+        List<Tasks> taskListFor = empl.getSentTasks();
         statisticDto.setCountGetTask((long) taskListFor.size());
         List<Tasks> completeTask = taskListFor.stream().filter(el ->
                 el.getTaskStatus() == Status.COMPLETE).collect(Collectors.toList());
@@ -110,7 +109,7 @@ public class TaskService {
 
     public List<Tasks> findTaskByUserNameWithFilter(String username, Status status, WorkVariant workVariant) {
         Employee empl = employeeRepository.findByUsername(username);
-        return tasksRepository.findDistinctByTaskFromEmployeesAndTaskStatusAndWorkVariant(empl, status, workVariant);
+        return tasksRepository.findAllBySenderEmployeeAndTaskStatusAndWorkVariant(empl, status, workVariant);
     }
 
     public Tasks findTaskById(long taskId) {

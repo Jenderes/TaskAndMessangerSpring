@@ -3,10 +3,7 @@ package com.example.task_manager.rest;
 import com.example.task_manager.dto.DepartmentDto;
 import com.example.task_manager.dto.MessageDto;
 import com.example.task_manager.dto.ProjectDto;
-import com.example.task_manager.dto.TaskDto;
-import com.example.task_manager.model.Department;
 import com.example.task_manager.model.Employee;
-import com.example.task_manager.model.Projects;
 import com.example.task_manager.security.jwt.JwtTokenProvider;
 import com.example.task_manager.service.AdminService;
 import com.example.task_manager.service.ManagerService;
@@ -87,20 +84,20 @@ public class AdminRestController {
     @PostMapping("close_project")
     public ResponseEntity<?> CloseProject(HttpServletRequest request,
                                           @RequestBody ProjectDto projectDto) {
-
+        adminService.deleteProject(projectDto.getProjectId());
         return ResponseEntity.ok(new MessageDto(" set in project"));
     }
 
     @PostMapping("close_department")
     public ResponseEntity<?> closeDepartment(HttpServletRequest request,
                                              @RequestBody DepartmentDto departmentDto) {
-
+        adminService.deleteDepartment(departmentDto.getDepartmentId());
         return ResponseEntity.ok(new MessageDto("department set in project"));
     }
-    @PostMapping("delete_employee")
+    @PostMapping("delete_employee/{employeeId}")
     public ResponseEntity<?> deleteEmployee(HttpServletRequest request,
-                                            @RequestBody ProjectDto projectDto) {
-
+                                            @PathVariable(name = "employeeId") Long employeeId) {
+        userService.deleteEmployee(employeeId);
         return ResponseEntity.ok(new MessageDto("department set in project"));
     }
 }

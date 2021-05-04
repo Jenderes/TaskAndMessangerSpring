@@ -13,7 +13,7 @@ public class TaskDto {
     private WorkVariant workVariant;
     private String taskDescription;
     private String taskFullNameSender;
-    private Long[] taskGetEmployeeId;
+    private Long employeeRecipientId;
 
     public Long getId() {
         return id;
@@ -55,12 +55,12 @@ public class TaskDto {
         this.taskDescription = taskDescription;
     }
 
-    public Long[] getTaskGetEmployeeId() {
-        return taskGetEmployeeId;
+    public Long getEmployeeRecipientId() {
+        return employeeRecipientId;
     }
 
-    public void setTaskGetEmployeeId(Long[] tasGetEmployeeId) {
-        this.taskGetEmployeeId = tasGetEmployeeId;
+    public void setEmployeeRecipientId(Long employeeRecipientId) {
+        this.employeeRecipientId = employeeRecipientId;
     }
 
     public WorkVariant getWorkVariant() {

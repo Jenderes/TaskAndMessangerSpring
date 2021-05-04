@@ -9,11 +9,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface TasksRepository extends JpaRepository<Tasks,Long> {
-    List<Tasks> findAllByTaskForEmployees(Employee taskForEmployees);
+    List<Tasks> findAllBySenderEmployee(Employee senderEmployee);
 
-    List<Tasks> findAllByTaskFromEmployees(Employee taskFromEmployees);
+    List<Tasks> findAllByRecipientEmployee(Employee recipientEmployee);
 
     Tasks findByTaskId(Long id);
 
-    List<Tasks> findDistinctByTaskFromEmployeesAndTaskStatusAndWorkVariant(Employee taskFromEmployees, Status taskStatus, WorkVariant workVariant);
+    List<Tasks> findAllBySenderEmployeeAndTaskStatusAndWorkVariant(Employee taskFromEmployees, Status taskStatus, WorkVariant workVariant);
 }

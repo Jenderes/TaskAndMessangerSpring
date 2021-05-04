@@ -24,16 +24,13 @@ public class Tasks {
     @Enumerated(EnumType.STRING)
     private WorkVariant workVariant;
 
-    //TODO: change column name reverse
-    @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = "employee_task_get",
-            joinColumns = @JoinColumn(name = "task_id"),
-            inverseJoinColumns = @JoinColumn(name = "user_id"))
-    private List<Employee> taskForEmployees;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "recipient_employee")
+    private Employee recipientEmployee;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "get_task_id")
-    private Employee taskFromEmployees;
+    @JoinColumn(name = "sender_employee")
+    private Employee senderEmployee;
 
     public String getTextTask() {
         return textTask;
@@ -67,20 +64,20 @@ public class Tasks {
         this.taskStatus = taskStatus;
     }
 
-    public Employee getTaskFromEmployees() {
-        return taskFromEmployees;
+    public Employee getRecipientEmployee() {
+        return recipientEmployee;
     }
 
-    public void setTaskFromEmployees(Employee taskFromEmployees) {
-        this.taskFromEmployees = taskFromEmployees;
+    public void setRecipientEmployee(Employee recipientEmployee) {
+        this.recipientEmployee = recipientEmployee;
     }
 
-    public List<Employee> getTaskForEmployees() {
-        return taskForEmployees;
+    public Employee getSenderEmployee() {
+        return senderEmployee;
     }
 
-    public void setTaskForEmployees(List<Employee> taskForEmployees) {
-        this.taskForEmployees = taskForEmployees;
+    public void setSenderEmployee(Employee senderEmployee) {
+        this.senderEmployee = senderEmployee;
     }
 
     public Long getTaskId() {
@@ -115,7 +112,7 @@ public class Tasks {
         taskDto.setDateStart(this.getSendDate());
         taskDto.setDateEnd(this.getEndDate());
         taskDto.setWorkVariant(this.getWorkVariant());
-        Employee employeeSender = this.getTaskFromEmployees();
+        Employee employeeSender = this.getRecipientEmployee();
         taskDto.setTaskFullNameSender(employeeSender.getFirstName() + " " + employeeSender.getLastName());
         return taskDto;
     }

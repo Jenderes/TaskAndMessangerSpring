@@ -25,11 +25,11 @@ public class Employee {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "taskForEmployees")
-    private List<Tasks> taskFor;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "recipientEmployee")
+    private List<Tasks> receivedTasks;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "taskFromEmployees")
-    private List<Tasks> taskFrom;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "senderEmployee")
+    private List<Tasks> sentTasks;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "ContactUserId")
     private List<Contact> contactFor;
@@ -131,20 +131,20 @@ public class Employee {
         this.phone = phone;
     }
 
-    public List<Tasks> getTaskFor() {
-        return taskFor;
+    public List<Tasks> getReceivedTasks() {
+        return receivedTasks;
     }
 
-    public void setTaskFor(List<Tasks> taskFor) {
-        this.taskFor = taskFor;
+    public void setReceivedTasks(List<Tasks> receivedTasks) {
+        this.receivedTasks = receivedTasks;
     }
 
-    public List<Tasks> getTaskFrom() {
-        return taskFrom;
+    public List<Tasks> getSentTasks() {
+        return sentTasks;
     }
 
-    public void setTaskFrom(List<Tasks> taskFrom) {
-        this.taskFrom = taskFrom;
+    public void setSentTasks(List<Tasks> sentTasks) {
+        this.sentTasks = sentTasks;
     }
 
     public List<Contact> getContactFor() {

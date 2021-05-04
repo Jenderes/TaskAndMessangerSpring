@@ -73,7 +73,7 @@ public class UserService {
         return result;
     }
 
-    public void delete(Long id) {
+    public void deleteEmployee(Long id) {
         if (employeeRepository.findById(id).isPresent()) {
             employeeRepository.deleteById(id);
             log.info("IN delete - user with id: {} successfully deleted",id);

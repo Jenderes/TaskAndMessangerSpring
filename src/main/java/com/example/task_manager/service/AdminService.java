@@ -91,20 +91,16 @@ public class AdminService {
     }
 
     public List<Employee> getDepartmentManagersWithoutDepartment() {
-        List<Role> roles = new ArrayList<>();
-        roles.add(roleRepository.findByName("ROLE_USER"));
-        roles.add(roleRepository.findByName("ROLE_DM"));
-        List<Employee> departmentManagerList = employeeRepository.findEmployeesByRoles(roles);
+        Role roleDm = roleRepository.findByName("ROLE_DM");
+        List<Employee> departmentManagerList = roleDm.getEmployees();
         return departmentManagerList.stream()
                 .filter(departmentManager -> departmentManager.getManagerDepartment() == null)
                 .collect(Collectors.toList());
     }
 
     public List<Employee> getProjectManagersWithoutProject() {
-        List<Role> roles = new ArrayList<Role>();
-        roles.add(roleRepository.findByName("ROLE_USER"));
-        roles.add(roleRepository.findByName("ROLE_PM"));
-        List<Employee> projectManagerList = employeeRepository.findEmployeesByRoles(roles);
+        Role rolePm = roleRepository.findByName("ROLE_PM");
+        List<Employee> projectManagerList = rolePm.getEmployees();
         return projectManagerList.stream()
                 .filter(departmentManager -> departmentManager.getManagerProjects() == null)
                 .collect(Collectors.toList());
@@ -125,4 +121,13 @@ public class AdminService {
     public List<Projects> getProjectsWithoutDepartment() {
         return projectRepository.findProjectsByProjectDepartmentIsNull();
     }
+
+    public void deleteProject(long projectId) {
+        projectRepository.delete(projectRepository.findProjectByProjectId(projectId));
+    }
+
+    public void deleteDepartment(long departmentId) {
+        departmentRepository.delete(departmentRepository.findDepartmentByDepartmentId(departmentId));
+    }
+
 }

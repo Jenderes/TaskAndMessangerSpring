@@ -58,28 +58,4 @@ public class ManagerRestController {
         }
         return departmentsDto;
     }
-
-    @PostMapping("resend")
-    public ResponseEntity<?> resendTask(HttpServletRequest request,
-                                        @RequestBody ResendDto resendDto) {
-        String resolveToken = jwtTokenProvider.resolveToken(request);
-        log.info("get token from request");
-        String username = jwtTokenProvider.getUserName(resolveToken);
-        Employee sender = userService.findByUsername(username);
-        log.info("get username from token - username: {}",username);
-        List<String> roles = jwtTokenProvider.getRolesName(sender.getRoles());
-        log.info("get list roles from employee - username: {}",roles.toString());
-        if (resendDto.getTaskId() == 0) return ResponseEntity.ok(new MessageDto("Empty task id"));
-        Tasks taskResend = taskService.findTaskById(resendDto.getTaskId());
-            if (resendDto.getDepartmentId() == 0 || resendDto.getDepartmentId() == taskResend.getTaskDepartment().getDepartmentId()){
-                if (resendDto.getEmployeeId().length == 0) return ResponseEntity.ok(new MessageDto("Empty department id and employee id"));
-                taskResend.setTaskForEmployees(Arrays.stream(resendDto.getEmployeeId()).mapToObj(userService::findById).collect(Collectors.toList()));
-                taskService.saveTask(taskResend);
-            } else {
-                    taskResend.setTaskDepartment(managerService.getDepartmentById(resendDto.getDepartmentId()));
-                    taskResend.setTaskForEmployees(null);
-                    taskService.saveTask(taskResend);
-            }
-        return ResponseEntity.ok(new MessageDto("task resend"));
-    }
 }

@@ -4,23 +4,23 @@ import java.util.List;
 
 public class ResendDto {
     private long taskId;
-    private long[] employeeId;
+    private long employeeId;
     private long departmentId;
 
     public ResendDto() {
     }
 
-    public ResendDto(long taskId, long[] employeeId, long departmentId) {
+    public ResendDto(long taskId, long employeeId, long departmentId) {
         this.taskId = taskId;
         this.employeeId = employeeId;
         this.departmentId = departmentId;
     }
 
-    public long[] getEmployeeId() {
+    public long getEmployeeId() {
         return employeeId;
     }
 
-    public void setEmployeeId(long[] employeeId) {
+    public void setEmployeeId(long  employeeId) {
         this.employeeId = employeeId;
     }
 
